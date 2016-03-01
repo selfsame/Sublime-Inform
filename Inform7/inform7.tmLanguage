@@ -5,7 +5,6 @@
 	<key>fileTypes</key>
 	<array>
 		<string>i7x</string>
-		<string>inform</string>
 		<string>ni</string>
 	</array>
 	<key>name</key>
@@ -13,11 +12,104 @@
 	<key>patterns</key>
 	<array>
 		<dict>
-			<key>match</key>
-			<string>\b(Include|Release)\b</string>
-			<key>name</key>
-			<string>keyword.control.Inform7</string>
+			<key>include</key>
+			<string>#all</string>
 		</dict>
+	</array>
+	<key>repository</key>
+	<dict>
+		<key>all</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#comment</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#punctuation</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#string</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#braces</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#heading</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#literal</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#control</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#imperative</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#definition</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#table</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#storage</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#articles</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#operator</string>
+				</dict>
+			</array>
+		</dict>
+		<key>articles</key>
+		<dict>
+			<key>match</key>
+			<string>(\b(((A|a)n?)|(T|t)he|and)\b)|\.\,</string>
+			<key>name</key>
+			<string>meta.article.Inform7</string>
+		</dict>
+		<key>braces</key>
+		<dict>
+			<key>begin</key>
+			<string>\(</string>
+			<key>contentName</key>
+			<string>meta.group.braces.round.Inform7 meta.function.Inform7</string>
+			<key>end</key>
+			<string>\)</string>
+			<key>name</key>
+			<string>variable.parameter.function.Inform7</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>((C|c)alled[ ]+|\-[^\)]+)</string>
+				</dict>
+				<dict>
+					<key>comment</key>
+					<string>declaration</string>
+					<key>match</key>
+					<string>([^\)\-]*)</string>
+					<key>name</key>
+					<string>constant.language.Inform7 variable.language.Inform7</string>
+				</dict>
+			</array>
+		</dict>
+		<key>comment</key>
 		<dict>
 			<key>begin</key>
 			<string>\[</string>
@@ -28,6 +120,95 @@
 			<key>name</key>
 			<string>comment.block.Inform7</string>
 		</dict>
+		<key>control</key>
+		<dict>
+			<key>comment</key>
+			<string>Control flow</string>
+			<key>match</key>
+			<string>(^[ \t]*(If|if|Else|else|Otherwise|otherwise)\b)|\b(if|or)\b</string>
+			<key>name</key>
+			<string>keyword.control.flow.Inform7</string>
+		</dict>
+		<key>definition</key>
+		<dict>
+			<key>begin</key>
+			<string>((^[ \t]*|\.[ \t]*)((I|i)nstead|(A|a)fter|(B|b)efore|(U|u)nderstand|(T|t)o|(C|c)heck|(E|e)very turn|(A|a)t|(C|c)arry out|(W|w)hen|(D|d)efinition|(R|r)eport|(I|i)nclude|(R|r)elease)\b)</string>
+			<key>comment</key>
+			<string>Function defs</string>
+			<key>end</key>
+			<string>(?=\.)|(?=\:)|(?=\,)|(?=then)</string>
+			<key>name</key>
+			<string>entity.name.function.Inform7</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#braces</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#string</string>
+				</dict>
+			</array>
+		</dict>
+		<key>heading</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.Inform7</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>constant.language.Inform7</string>
+				</dict>
+			</dict>
+			<key>comment</key>
+			<string>Matches headings for major sections in Inform7</string>
+			<key>match</key>
+			<string>((Volume|Book|Chapter|Part|Section|Table)\s+[\d\(\)a-zA-Z]+?)\s+-?\s+([^\n]*\n[^\w]*)</string>
+		</dict>
+		<key>imperative</key>
+		<dict>
+			<key>comment</key>
+			<string>Imperitive</string>
+			<key>match</key>
+			<string>((^[ \t]*|[ \t]*((T|t)hen|,)[ \t]*)((S|s)ay|(N|n)ow|(T|t)ry|(L|l)et|(C|c)hange|(M|m)ove|(R|r)epeat|(E|e)nd|(D|d)ecide|(R|r)ule|(D|d)ecrease|(I|i)ncrease)\b)</string>
+		</dict>
+		<key>literal</key>
+		<dict>
+			<key>comment</key>
+			<string>Gotta call out the numbers!</string>
+			<key>match</key>
+			<string>\b([0-9]+|one|two|three|five|ten|(four|six|seven|eight|nine|)(teen)?|(thir|fif)teen|eleven|twelve|twenty|thirty|forty|fifty)\b</string>
+			<key>name</key>
+			<string>constant.numeric.Inform7</string>
+		</dict>
+		<key>operator</key>
+		<dict>
+			<key>match</key>
+			<string>=|(&lt;|&gt;)=?|\b(is|does|did|are|be|can|could)(n\'t| not)?\b</string>
+			<key>name</key>
+			<string>keyword.operator.Inform7</string>
+		</dict>
+		<key>punctuation</key>
+		<dict>
+			<key>match</key>
+			<string>(\;|\:|\.|\,|(T|t)hen)</string>
+			<key>name</key>
+			<string>punctuation.terminator.Inform7</string>
+		</dict>
+		<key>storage</key>
+		<dict>
+			<key>match</key>
+			<string>\b(and|A|a|An|an|(A|a)ction|((R|r)ule)(book)?|(I|i)n(side)?|(O|o)n)\b|\b(of|kind|called|carries|carry)\b|\b((wear|visible|invisible|random|list)s?)\b</string>
+			<key>name</key>
+			<string>meta.reserved.Inform7</string>
+		</dict>
+		<key>string</key>
 		<dict>
 			<key>begin</key>
 			<string>"</string>
@@ -45,30 +226,43 @@
 					<key>end</key>
 					<string>\]</string>
 					<key>name</key>
-					<string>keyword.operator.Inform7</string>
+					<string>source.regexp.Inform7 meta.raw-regexp.Inform7 constant.other.character</string>
 				</dict>
 			</array>
 		</dict>
+		<key>table</key>
 		<dict>
-			<key>comment</key>
-			<string>Matches headings for major sections in Inform7</string>
-			<key>match</key>
-			<string>(Volume|Book|Chapter|Part|Section|Table)\s+\d?\s+-?\s+((?:\w|\s|-)*)</string>
+			<key>begin</key>
+			<string>(^((T|t)able[ ]+(of|Of)[ ]+([^\n]+)\n))</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.table.Inform7</string>
+				</dict>
+				<key>5</key>
+				<dict>
+					<key>name</key>
+					<string>constant.language.Inform7</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(^[ \t]+\n)</string>
 			<key>name</key>
-			<string>storage.type.Inform7</string>
+			<string>meta.table.Inform7</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#all</string>
+				</dict>
+			</array>
 		</dict>
-		<dict>
-			<key>comment</key>
-			<string>Gotta call out the numbers!</string>
-			<key>match</key>
-			<string>([0-9])+</string>
-			<key>name</key>
-			<string>constant.numeric.Inform7</string>
-		</dict>
-	</array>
+	</dict>
 	<key>scopeName</key>
 	<string>source.Inform7</string>
 	<key>uuid</key>
-	<string>0c4cbdee-beb7-4ea6-af56-27246d479373</string>
+	<string>-0c4cbdee-beb7-4ea6-af56-27246d479373</string>
 </dict>
 </plist>

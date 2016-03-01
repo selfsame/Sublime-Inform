@@ -1,0 +1,114 @@
+# [PackageDev] target_format: plist, ext: tmLanguage
+---
+name: Inform7
+scopeName: source.Inform7
+fileTypes: [i7x, ni]
+uuid: -0c4cbdee-beb7-4ea6-af56-27246d479373
+
+patterns:
+- include: '#all'
+
+repository:
+  all:
+    patterns:
+    - include: '#comment'
+    - include: '#punctuation'
+    - include: '#string'
+    - include: '#braces'
+    - include: '#heading'
+    - include: '#literal'
+    - include: '#control'
+    - include: '#imperative'
+    - include: '#definition'
+    - include: '#table'
+    - include: '#storage'
+    - include: '#articles'
+    - include: '#operator'
+
+  comment:
+    begin: \[
+    comment: All comments in Inform7 are delimited this way.
+    end: \]
+    name: comment.block.Inform7
+
+  punctuation:
+    match: (\;|\:|\.|\,|(T|t)hen)
+    name: punctuation.terminator.Inform7
+
+  string:
+    begin: '"'
+    end: '"'
+    name: string.quoted.double.Inform7
+    patterns:
+    - begin: \[
+      comment: For logic inside of strings.
+      end: \]
+      name: source.regexp.Inform7 meta.raw-regexp.Inform7 constant.other.character
+
+  braces:
+    begin: \(
+    end: \)
+    name: variable.parameter.function.Inform7
+    contentName: meta.group.braces.round.Inform7 meta.function.Inform7
+    patterns:
+    - match: ((C|c)alled[ ]+|\-[^\)]+)
+    - comment: declaration
+      name: constant.language.Inform7 variable.language.Inform7
+      match: ([^\)\-]*)
+
+
+  heading:
+    comment: Matches headings for major sections in Inform7
+    match: ((Volume|Book|Chapter|Part|Section|Table)\s+[\d\(\)a-zA-Z]+?)\s+-?\s+([^\n]*\n[^\w]*)
+    captures: 
+      '1': {name: storage.type.Inform7}
+      '3': {name: constant.numeric.Inform7}
+      '3': {name: constant.language.Inform7}
+
+  literal:
+    comment: Gotta call out the numbers!
+    match: \b([0-9]+|one|two|three|five|ten|(four|six|seven|eight|nine|)(teen)?|(thir|fif)teen|eleven|twelve|twenty|thirty|forty|fifty)\b
+    name: constant.numeric.Inform7
+
+# |text|nothing|everywhere|backdrop|hold|holder|scope|room|scene|noun|actor|someone|something|anything|item|thing|person|people|men|women|man|woman|container|supporter
+
+  storage:
+    match: \b(and|A|a|An|an|(A|a)ction|((R|r)ule)(book)?|(I|i)n(side)?|(O|o)n)\b|\b(of|kind|called|carries|carry)\b|\b((wear|visible|invisible|random|list)s?)\b
+    name: meta.reserved.Inform7
+
+  articles:
+    match: (\b(((A|a)n?)|(T|t)he|and)\b)|\.\,
+    name: meta.article.Inform7
+
+  operator:
+    match: =|(<|>)=?|\b(is|does|did|are|be|can|could)(n\'t| not)?\b
+    name: keyword.operator.Inform7
+
+  control:
+    comment: Control flow
+    match: (^[ \t]*(If|if|Else|else|Otherwise|otherwise)\b)|\b(if|or)\b
+    name: keyword.control.flow.Inform7
+
+  table:
+    begin: (^((T|t)able[ ]+(of|Of)[ ]+([^\n]+)\n))
+    end: (^[ \t]+\n)
+    beginCaptures:
+      '2': {name: storage.type.table.Inform7}
+      '5': {name: constant.language.Inform7}
+    patterns:
+    - include: '#all'
+    name: meta.table.Inform7 
+
+  imperative:
+    comment: Imperitive
+    match: ((^[ \t]*|[ \t]*((T|t)hen|,)[ \t]*)((S|s)ay|(N|n)ow|(T|t)ry|(L|l)et|(C|c)hange|(M|m)ove|(R|r)epeat|(E|e)nd|(D|d)ecide|(R|r)ule|(D|d)ecrease|(I|i)ncrease)\b)
+    # name: entity.name.function.Inform7
+
+  definition:
+    comment: Function defs
+    begin: ((^[ \t]*|\.[ \t]*)((I|i)nstead|(A|a)fter|(B|b)efore|(U|u)nderstand|(T|t)o|(C|c)heck|(E|e)very turn|(A|a)t|(C|c)arry out|(W|w)hen|(D|d)efinition|(R|r)eport|(I|i)nclude|(R|r)elease)\b)
+    end: (?=\.)|(?=\:)|(?=\,)|(?=then)
+    name: entity.name.function.Inform7
+    patterns:
+    - include: '#braces'
+    - include: '#string'
