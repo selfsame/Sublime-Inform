@@ -112,13 +112,33 @@
 		<key>comment</key>
 		<dict>
 			<key>begin</key>
-			<string>\[</string>
+			<string>\[[^\]]*</string>
 			<key>comment</key>
 			<string>All comments in Inform7 are delimited this way.</string>
 			<key>end</key>
 			<string>\]</string>
 			<key>name</key>
 			<string>comment.block.Inform7</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>"</string>
+					<key>end</key>
+					<string>"</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>begin</key>
+							<string>\[</string>
+							<key>comment</key>
+							<string>For logic inside of strings.</string>
+							<key>end</key>
+							<string>\]</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
 		</dict>
 		<key>control</key>
 		<dict>

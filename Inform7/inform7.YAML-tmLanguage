@@ -26,9 +26,16 @@ repository:
     - include: '#operator'
 
   comment:
-    begin: \[
+    begin: \[[^\]]*
     comment: All comments in Inform7 are delimited this way.
     end: \]
+    patterns:
+    - begin: '"'
+      end: '"'
+      patterns:
+      - begin: \[
+        comment: For logic inside of strings.
+        end: \]
     name: comment.block.Inform7
 
   punctuation:
